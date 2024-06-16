@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers("/api/user").permitAll()
-                            .requestMatchers("/api/user/register").permitAll()
+                            .requestMatchers("/api/user/*").permitAll()
                             .anyRequest().authenticated();
         }).addFilterBefore(new JwtFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class);
 //        http.formLogin(Customizer.withDefaults());

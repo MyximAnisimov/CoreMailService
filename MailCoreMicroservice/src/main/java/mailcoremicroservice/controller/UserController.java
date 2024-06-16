@@ -16,6 +16,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(path = "/api/user")
@@ -25,6 +27,7 @@ public class UserController {
 //    public ResponseEntity<String> sayHello(){
 //    return ResponseEntity.ok("Hello");
 //}
+    private List<String> role = new ArrayList<>();
         private final AuthenticationManager authManager = new AuthenticationManager() {
 
             @Override
@@ -35,13 +38,12 @@ public class UserController {
         private final JwtUtils jwtUtil;
         private final UserService userService;
 
-
         public UserController( JwtUtils jwtUtil, UserService userService) {
             this.jwtUtil = jwtUtil;
             this.userService = userService;
         }
 
-        @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+        @PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> login(@RequestBody UserDTO req){
             String login = req.getEmail();
             String password = HashUtil.digestPassword(req.getPassword());
@@ -63,9 +65,10 @@ public class UserController {
 //            String password = req.getPassword();
             System.out.println(req.getEmail());
             User user = userService.findByEmail(login);
+//            setRole("MODERATOR");
             if(user == null){
                 userService.register(login, password);
-                return ResponseEntity.ok("User has been created");
+                return ResponseEntity.ok("User has been added successfully");
             }else{
                 return new ResponseEntity<String>("User exists with the same login", HttpStatus.BAD_REQUEST);
             }
@@ -84,6 +87,9 @@ public class UserController {
                 return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
             }
 
+        }
+        public void setRole(String role){
+            this.role.add(role);
         }
 
 }
