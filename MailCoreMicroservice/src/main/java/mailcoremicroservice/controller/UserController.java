@@ -84,12 +84,13 @@ public class UserController {
 
                 UserRegisteredEvent event = new UserRegisteredEvent();
                 event.email = login;
-                event.message = "Use has been created!";
+                event.message = "Хуй";
 
                 String json = new ObjectMapper().writeValueAsString(event);
+
                 kafkaTemplate.send("register", json);
 //                kafkaTemplate.send("Your account has been registered!");
-                sendMessage("Your, account has been registered!");
+//                sendMessage("Your, account has been registered!");
                 return ResponseEntity.ok("User has been added successfully");
             }else{
                 return new ResponseEntity<String>("User exists with the same login", HttpStatus.BAD_REQUEST);
