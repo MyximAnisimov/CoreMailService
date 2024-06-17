@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mailcoremicroservice.events.UserRegisteredEvent;
 import mailcoremicroservice.model.User;
+import mailcoremicroservice.repositories.RoleRepository;
 import mailcoremicroservice.requests.UserDTO;
+import mailcoremicroservice.roles.Role;
 import mailcoremicroservice.services.UserService;
 import mailcoremicroservice.utils.HashUtil;
 import mailcoremicroservice.utils.JwtUtils;
@@ -36,6 +38,9 @@ public class UserController {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public void sendMessage(String message) {
         kafkaTemplate.send("register", message);
     }
@@ -64,7 +69,7 @@ public class UserController {
             User user = userService.findByLoginAndPassword(login, password);
             if(user != null){
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-                String token = jwtUtil.generateToken(login, new ArrayList<String>(){{add("USER");}});
+                String token = jwtUtil.generateToken(login, new ArrayList<String>(){{add("ROLE_USER");}});
                 return ResponseEntity.ok("You have entered your account");
             }else{
                 return new ResponseEntity<>("Сочетания почты и пароля не существует", HttpStatus.NOT_FOUND);
@@ -78,18 +83,19 @@ public class UserController {
 //            String password = req.getPassword();
             System.out.println(req.getEmail());
             User user = userService.findByEmail(login);
+            Role userRole = roleRepository.findByRole("ROLE_USER");
 //            setRole("MODERATOR");
             if(user == null){
-                userService.register(login, password);
+                userService.register(login, password, userRole);
 
                 UserRegisteredEvent event = new UserRegisteredEvent();
                 event.email = login;
-                event.message = "Хуй";
+                event.message = "You have been authorized successfully!";
 
                 String json = new ObjectMapper().writeValueAsString(event);
-
+                System.out.println(userRole.getRole());
                 kafkaTemplate.send("register", json);
-//                kafkaTemplate.send("Your account has been registered!");
+//                kafkaTemplate.send("Your accounСt has been registered!");
 //                sendMessage("Your, account has been registered!");
                 return ResponseEntity.ok("User has been added successfully");
             }else{

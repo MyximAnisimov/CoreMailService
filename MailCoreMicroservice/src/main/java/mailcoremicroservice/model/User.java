@@ -2,7 +2,7 @@ package mailcoremicroservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import mailcoremicroservice.roles.Roles;
+import mailcoremicroservice.roles.Role;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
@@ -13,9 +13,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 
 public class User implements Serializable {
-    public User(String email, String password){
+    public User(String email, String password, Role role_id){
         this.email = email;
         this.password = password;
+        this.role = role_id;
     }
     @Id
     @Column(nullable = false, unique = true, name = "id")
@@ -28,8 +29,10 @@ public class User implements Serializable {
     @Column @NotNull
     private String password;
 
-//    @Column @NotNull
-//    private String role;
+    @Getter
+    @ManyToOne
+    @JoinColumn(name = "role_id") // Теперь правильно связываем с "role_id"
+    private Role role;
 
 
 

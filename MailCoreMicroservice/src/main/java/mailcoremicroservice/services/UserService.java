@@ -3,6 +3,7 @@ package mailcoremicroservice.services;
 import jakarta.transaction.Transactional;
 import mailcoremicroservice.model.User;
 import mailcoremicroservice.repositories.UserRepository;
+import mailcoremicroservice.roles.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,9 +30,9 @@ public class UserService {
 //        User user = new User(login, password);
 //        userRepository.save(user);
 @Transactional
-public String register(String login, String password){
+public String register(String login, String password, Role role_id){
     try {
-        User user = new User(login, password);
+        User user = new User(login, password, role_id);
         userRepository.save(user);
         return "Success";
     }catch (Exception e){
