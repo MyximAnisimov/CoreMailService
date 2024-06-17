@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import mailcoremicroservice.services.UserServiceDetails;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,19 @@ public class JwtUtils {
 
     }
 
+    public Claims getAllClaimsFromToken(String token) {
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+//            Logger.error("Could not get all claims Token from passed token");
+            claims = null;
+        }
+        return claims;
+    }
     public String generateToken(String username, List<String> roles) {
         System.out.println("Генерируем токен " + LocalDateTime.now());
         Claims claims = Jwts.claims().setSubject(username);

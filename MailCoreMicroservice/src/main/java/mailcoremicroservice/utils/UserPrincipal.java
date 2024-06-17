@@ -3,9 +3,13 @@ package mailcoremicroservice.utils;
 import lombok.AllArgsConstructor;
 import mailcoremicroservice.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails
 {
@@ -13,7 +17,8 @@ public class UserPrincipal implements UserDetails
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        return List.of(new SimpleGrantedAuthority(user.getRole().getRole()));
     }
 
     @Override

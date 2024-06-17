@@ -23,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -68,14 +69,17 @@ public class UserController {
 //            String password = req.getPassword();
             User user = userService.findByLoginAndPassword(login, password);
             if(user != null){
-                authManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-                String token = jwtUtil.generateToken(login, new ArrayList<String>(){{add("ROLE_USER");}});
-                return ResponseEntity.ok("You have entered your account");
+                //authManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+                String token = jwtUtil.generateToken(login, Collections.singletonList(user.getRole().getRole()));
+                return ResponseEntity.ok(token);
             }else{
                 return new ResponseEntity<>("Сочетания почты и пароля не существует", HttpStatus.NOT_FOUND);
             }
         }
-
+        @GetMapping(path = "/example", produces = MediaType.APPLICATION_JSON_VALUE)
+        private ResponseEntity<String> greetings(){
+            return ResponseEntity.ok("Hello world");
+        }
         @PutMapping(path = "/register",produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> register(@RequestBody UserDTO req) throws JsonProcessingException {
             String login = req.getEmail();
