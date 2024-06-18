@@ -34,8 +34,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> {
 //                    requests.requestMatchers("/api/user").permitAll()
 //                            .requestMatchers("/api/user/*").permitAll()
-                    requests.requestMatchers("/api/user/login").permitAll()
-                            .requestMatchers("/api/user/register").permitAll()
+                    requests.requestMatchers("/api/user/*").permitAll()
+                            .requestMatchers("/api/user").permitAll()
                             .requestMatchers("/api/user/example").hasAuthority("ROLE_MODERATOR")
                             .anyRequest().authenticated();
         }).addFilterBefore(new JwtFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class);

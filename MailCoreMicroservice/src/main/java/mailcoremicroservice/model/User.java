@@ -3,7 +3,7 @@ package mailcoremicroservice.model;
 import jakarta.persistence.*;
 import lombok.*;
 import mailcoremicroservice.roles.Role;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 

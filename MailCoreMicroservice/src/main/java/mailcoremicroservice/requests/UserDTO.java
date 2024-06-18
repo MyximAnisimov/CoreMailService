@@ -1,7 +1,7 @@
 package mailcoremicroservice.requests;
 
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 public class UserDTO {

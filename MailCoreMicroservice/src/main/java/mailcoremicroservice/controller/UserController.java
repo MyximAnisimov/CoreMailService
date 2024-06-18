@@ -42,9 +42,9 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    public void sendMessage(String message) {
-        kafkaTemplate.send("register", message);
-    }
+//    public void sendMessage(String message) {
+//        kafkaTemplate.send("register", message);
+//    }
 
     private List<String> role = new ArrayList<>();
         private final AuthenticationManager authManager = new AuthenticationManager() {
@@ -62,7 +62,7 @@ public class UserController {
             this.userService = userService;
         }
 
-        @PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+        @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> login(@RequestBody UserDTO req){
             String login = req.getEmail();
             String password = HashUtil.digestPassword(req.getPassword());
@@ -80,20 +80,22 @@ public class UserController {
         private ResponseEntity<String> greetings(){
             return ResponseEntity.ok("Hello world");
         }
-        @PutMapping(path = "/register",produces = MediaType.APPLICATION_JSON_VALUE)
+
+        @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> register(@RequestBody UserDTO req) throws JsonProcessingException {
-            String login = req.getEmail();
+            String email = req.getEmail();
+//            System.out.println(req.getEmail());
                         String password = HashUtil.digestPassword(req.getPassword());
 //            String password = req.getPassword();
             System.out.println(req.getEmail());
-            User user = userService.findByEmail(login);
+            User user = userService.findByEmail(email);
             Role userRole = roleRepository.findByRole("ROLE_USER");
 //            setRole("MODERATOR");
             if(user == null){
-                userService.register(login, password, userRole);
+                userService.register(email, password, userRole);
 
                 UserRegisteredEvent event = new UserRegisteredEvent();
-                event.email = login;
+                event.email = email;
                 event.message = "You have been authorized successfully!";
 
                 String json = new ObjectMapper().writeValueAsString(event);
@@ -103,7 +105,7 @@ public class UserController {
 //                sendMessage("Your, account has been registered!");
                 return ResponseEntity.ok("User has been added successfully");
             }else{
-                return new ResponseEntity<String>("User exists with the same login", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<String>("User exists with the same email", HttpStatus.BAD_REQUEST);
             }
         }
 
