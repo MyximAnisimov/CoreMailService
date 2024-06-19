@@ -21,10 +21,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -62,7 +64,7 @@ public class UserController {
             this.userService = userService;
         }
 
-        @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+        @PostMapping(path="/login", produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> login(@RequestBody UserDTO req){
             String login = req.getEmail();
             String password = HashUtil.digestPassword(req.getPassword());
@@ -76,18 +78,33 @@ public class UserController {
                 return new ResponseEntity<>("Сочетания почты и пароля не существует", HttpStatus.NOT_FOUND);
             }
         }
+
+        @PostMapping(path="/getPhotos", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+        private ResponseEntity<String> getPhotos(@RequestPart("files") List<MultipartFile> files){
+            for (MultipartFile file : files) {
+                if (!Objects.equals(file.getContentType(), MediaType.IMAGE_PNG_VALUE) &&
+                        !Objects.equals(file.getContentType(), MediaType.IMAGE_JPEG_VALUE)) {
+                    System.out.println("Wrong");
+                    return ResponseEntity.badRequest().body("Неверный тип файла. Допустимы только PNG и JPEG.");
+                }
+            }
+
+            // Обработка файла (сохранение, обработка, ...)
+            System.out.println("Some photos has been delivered on the server");
+            return ResponseEntity.ok("Файл успешно загружен.");
+        }
         @GetMapping(path = "/example", produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> greetings(){
             return ResponseEntity.ok("Hello world");
         }
 
-        @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+        @PutMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
         private ResponseEntity<String> register(@RequestBody UserDTO req) throws JsonProcessingException {
             String email = req.getEmail();
 //            System.out.println(req.getEmail());
                         String password = HashUtil.digestPassword(req.getPassword());
 //            String password = req.getPassword();
-            System.out.println(req.getEmail());
+//            System.out.println(req.getEmail());
             User user = userService.findByEmail(email);
             Role userRole = roleRepository.findByRole("ROLE_USER");
 //            setRole("MODERATOR");
@@ -99,7 +116,7 @@ public class UserController {
                 event.message = "You have been authorized successfully!";
 
                 String json = new ObjectMapper().writeValueAsString(event);
-                System.out.println(userRole.getRole());
+//                System.out.println(userRole.getRole());
                 kafkaTemplate.send("register", json);
 //                kafkaTemplate.send("Your accounСt has been registered!");
 //                sendMessage("Your, account has been registered!");

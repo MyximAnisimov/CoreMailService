@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header v-bind="headerParams"/>
+<!--    <Header v-bind="headerParams"/>-->
 
     <Loader id="load" v-if="loading"/>
     <div id="contentContainer" v-else>

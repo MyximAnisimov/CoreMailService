@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RegistrationPage from "@/components/Registration";
-import HelloWorld from "@/components/MainPage.vue";
+ import RegistrationPage from "@/components/Registration";
+import MainPage from "@/components/MainPage.vue";
  import NotFoundError from "@/components/Error";
 
 Vue.use(VueRouter);
@@ -26,7 +26,7 @@ export default new VueRouter({
         {
             path: '/app',
             name: 'app-page',
-            component: HelloWorld,
+            component: MainPage,
             beforeEnter: (to, from, next) => {
                  if (localStorage.getItem("jwt")) next();
                  else next({
