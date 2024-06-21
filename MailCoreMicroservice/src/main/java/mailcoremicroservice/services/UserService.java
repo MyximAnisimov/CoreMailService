@@ -25,10 +25,7 @@ public class UserService {
     public User findByLoginAndPassword(String login, String password){
         return userRepository.getByEmailAndPassword(login, password);
     }
-//    @Transactional
-//    public String register(String login, String password){
-//        User user = new User(login, password);
-//        userRepository.save(user);
+
 @Transactional
 public String register(String login, String password, Role role_id){
     try {
@@ -41,14 +38,14 @@ public String register(String login, String password, Role role_id){
 
 }
 
-    @Transactional
-    public String deleteByUser(User user){
-        try {
-            userRepository.delete(user);
-            return "Success";
-        }catch (Exception e){
-            return "Error";
-        }
-    }
+//    @Transactional
+//    public String deleteByUser(User user){
+//        try {
+//            userRepository.delete(user);
+//            return "Success";
+//        }catch (Exception e){
+//            return "Error";
+//        }
+//    }
 }
 

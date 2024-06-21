@@ -31,7 +31,7 @@ public class User implements Serializable {
 
     @Getter
     @ManyToOne
-    @JoinColumn(name = "role_id") // Теперь правильно связываем с "role_id"
+    @JoinColumn(name = "role_id")
     private Role role;
 
 

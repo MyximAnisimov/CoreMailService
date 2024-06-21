@@ -1,21 +1,13 @@
 <template>
   <div class="container">
     <div class="large-12 medium-12 small-12 cell">
-      <label>Files
+     <h2>Форма отправки фотографий</h2>
         <input type="file" id="files" ref="files" multiple v-on:change="handleFilesUpload()"/>
-      </label>
-    </div>
-<!--    <div class="large-12 medium-12 small-12 cell">-->
-<!--      <div v-for="(file, key) in files" class="file-listing">{{ file.name }} <span class="remove-file" v-on:click="removeFile( key )">Remove</span></div>-->
-<!--    </div>-->
-    <br>
-    <div class="large-12 medium-12 small-12 cell">
-      <button v-on:click="addFiles()">Add Files</button>
     </div>
     <br>
     <div class="large-12 medium-12 small-12 cell">
-      <button v-on:click="submitFiles()">Submit</button>
-    </div>
+      <button v-on:click="addFiles()">Выбрать файлы</button>
+      <button v-on:click="submitFiles()">Отправить файлы</button></div>
   </div>
 </template>
 
@@ -26,7 +18,6 @@ export default {
   props: {
     msg: String
   },
-
   methods:{
     addFiles(){
       this.$refs.files.click();
@@ -51,10 +42,20 @@ export default {
       ).then(() => {
         this.$notify({
           group: 'success',
-          title: 'Отправка запроса по авторизации',
-          text: 'Вы можете отправвлять запросы',
+          title: 'Отправка фотографий на сервер',
+          text: 'Вы отправили фотографии на сервер',
           type: 'success'
         });
+      }).catch(error => {
+        this.AxiosErrorHandler(error.response.data);
+      });
+    },
+    AxiosErrorHandler(errorText){
+      this.$notify({
+        group: 'error',
+        title: 'Error',
+        text: errorText,
+        type: 'error'
       })
     }
   },
@@ -64,30 +65,69 @@ export default {
     }
   },
   mounted() {
-    // Получение токена из localStorage (или другого места)
     const token = localStorage.getItem('token');
 
-    // Декодирование токена
     if (token) {
       const decodedToken = jwtDecode(token);
-      this.isModerator = decodedToken.role === 'ROLE_MODERATOR'; // Добавьте поле "role" в payload токена
+      this.isModerator = decodedToken.role === 'ROLE_MODERATOR';
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 input[type="file"]{
   position: absolute;
   top: -500px;
 }
-div.file-listing{
-  width: 200px;
+.container {
+  position: relative;
+  font-size: 20px;
+  flex-direction: column;
+  margin: 30px auto auto;
+  border-radius: 20px;
+  background: linear-gradient(to bottom left, rgb(220, 63, 7, 0.8), rgb(130, 30, 145, 0.8));
+  padding: 20px;
+  display: table;
+  text-align: center;
+  box-shadow: 0 0 10px 1px black;
+
 }
-span.remove-file{
-  color: red;
+button {
+  text-align: center;
+  text-transform: uppercase;
   cursor: pointer;
-  float: right;
+  letter-spacing: 2px;
+  position: relative;
+  border: none;
+  color: #193047;
+  padding: 15px;
+  min-width: 150px;
+  transition-duration: 0.4s;
+  overflow: hidden;
+  box-shadow: 0 5px 15px #193047;
+  border-radius: 4px;
 }
+button:hover {
+  background: #193047;
+  color: black;
+}
+button::after {
+  content: "";
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+button:active::after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
 </style>

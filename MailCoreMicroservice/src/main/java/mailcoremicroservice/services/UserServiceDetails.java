@@ -26,35 +26,9 @@ public class UserServiceDetails implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username).orElseThrow(() ->
-//                new UsernameNotFoundException("User not found: " + username));
-//
-//        int userId = user.getId();
-//        // Получите роль по role_id
-//        Role role = roleRepository.findById(userId); // Используйте свой метод получения роли по id
-//        String roleName = role.getName(); // Добавьте метод получения имени роли
-//
-//        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + roleName));
-//
-//        return new User(user.getUsername(), user.getPassword(), authorities);
-//    }
-
     @Override
     public UserDetails loadUserByUsername(String username){
         User user = userService.findByEmail(username);
-//        int userId = user.getId();
-//        // Получите роль по role_id
-//        Role role = roleRepository.findById(userId);
-//        String roleName = role.getRole();
-//        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleName));
-//
-////        Optional<Role> roles = roleRepository.findById(user.getId()); // Добавьте логику для получения списка ролей из базы данных
-////        List<GrantedAuthority> authorities = roles.stream()
-////                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-////                .collect(Collectors.toList());
-
         if(user == null){
             throw new UsernameNotFoundException("This user not found");
         }

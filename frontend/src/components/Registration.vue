@@ -1,6 +1,5 @@
 <template>
   <div id="content">
-<!--    <h1>Вход в систему</h1>-->
 
     <form id="form" @sumbit.prevent="logIn">
       <div id="login">
@@ -37,6 +36,9 @@ export default {
   name: "RegistrationPage",
   components: {
     ButtonRegLog,
+  },
+  beforeCreate() {
+    localStorage.clear();
   },
   data(){
     return{

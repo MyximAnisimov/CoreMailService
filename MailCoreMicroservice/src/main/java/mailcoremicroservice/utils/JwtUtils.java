@@ -21,7 +21,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
     private final String KEY = "secret";
-    private static final long TOKEN_VALIDITY = 1800000; //30 min
+    private static final long TOKEN_VALIDITY = 1800000;
     private final UserServiceDetails userDetails;
 
 
@@ -39,7 +39,7 @@ public class JwtUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-//            Logger.error("Could not get all claims Token from passed token");
+
             claims = null;
         }
         return claims;

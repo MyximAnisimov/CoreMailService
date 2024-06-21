@@ -19,11 +19,8 @@ public class KafkaController {
     @KafkaListener(topics="register")
     public void handleUserCreatedEvent(String json) throws JsonProcessingException {
         UserRegisteredEvent event = new ObjectMapper().readValue(json, UserRegisteredEvent.class);
-
-        // Доступ к email пользователя (например, из сообщения):
         String userEmail = event.email;
         String message = event.message;
-        // Отправка письма:
         System.out.println(json);
         projectEmailService.sendSimpleMessage(userEmail, "Добро пожаловать!", message);
     }

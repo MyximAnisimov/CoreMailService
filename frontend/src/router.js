@@ -14,7 +14,7 @@ export default new VueRouter({
             name: 'default-page',
             component: RegistrationPage,
             beforeEnter: (to, from, next) => {
-                (localStorage.getItem("jwt") !== null) ? next({name: 'app-page'}) : next({name: 'auth-page'});
+                (localStorage.getItem("jwt") !== null) ? next({name: 'auth-page'}) : next({name: 'app-page'});
             }
         },
         {
@@ -41,7 +41,7 @@ export default new VueRouter({
             props: {
                 default: true,
                 errorCode: "404",
-                errorMessage: "Данной страницы не сущуствует :("
+                errorMessage: "Данной страницы не существует"
             }
         },
         {

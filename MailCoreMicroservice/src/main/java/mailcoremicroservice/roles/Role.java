@@ -8,8 +8,6 @@ import java.util.List;
 
 @Entity
 public class Role {
-    //    @OneToOne(mappedBy = "role_id")
-    //    private User users;
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

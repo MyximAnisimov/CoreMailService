@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-<!--    <Header v-bind="headerParams"/>-->
-
     <Loader id="load" v-if="loading"/>
     <div id="contentContainer" v-else>
       <router-view/>
@@ -13,13 +11,9 @@
 </template>
 
 <script>
-// import Header from "@/components/Header";
 
 export default {
   name: 'App',
-  components: {
-    // Header
-  },
   mounted(){
     setTimeout(() => {this.loading = false}, 1000)
   }
