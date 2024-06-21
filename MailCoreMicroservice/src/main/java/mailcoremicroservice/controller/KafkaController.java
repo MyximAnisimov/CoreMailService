@@ -21,7 +21,6 @@ public class KafkaController {
         UserRegisteredEvent event = new ObjectMapper().readValue(json, UserRegisteredEvent.class);
         String userEmail = event.email;
         String message = event.message;
-        System.out.println(json);
         projectEmailService.sendSimpleMessage(userEmail, "Добро пожаловать!", message);
     }
 

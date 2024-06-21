@@ -78,7 +78,6 @@ public class GoogleDriveService {
 
     public String uploadFile(MultipartFile file) {
         try {
-            System.out.println(file.getOriginalFilename());
 
             String folderId = "1Uc89sO9vqOeIfQVZS3y8tsqIiGBj6Yjg?usp=drive_link";
                 File fileMetadata = new File();
@@ -91,7 +90,6 @@ public class GoogleDriveService {
                                 new ByteArrayInputStream(file.getBytes()))
                         )
                         .setFields("id").execute();
-                System.out.println(uploadFile);
                 return uploadFile.getId();
         } catch (Exception e) {
             System.out.printf("Error: "+ e);

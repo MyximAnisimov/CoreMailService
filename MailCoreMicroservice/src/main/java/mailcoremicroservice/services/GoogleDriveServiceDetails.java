@@ -15,7 +15,6 @@ public class GoogleDriveServiceDetails {
         return service.getfiles();
     }
     public String uploadVideo(MultipartFile file) throws IOException, GeneralSecurityException{
-        System.out.println(file.getOriginalFilename());
 
         return service.uploadFile(file);
     }
